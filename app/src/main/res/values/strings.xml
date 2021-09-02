@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">UberClone</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="btn_Enter">Entrar</string>
+    <string name="btn_Cadastrar">Cadastrar</string>
+    <string name="tela_login">Acessar minha conta</string>
+    <string name="tela_cadastro">Cadastrar novo usuario</string>
+    <string name="login_email">E-Mail</string>
+    <string name="login_senha">Senha</string>
+    <string name="cadastro_passageiro">Passageiro</string>
+    <string name="cadastro_motorista">Motorista</string>
+    <string name="cadastro_nome">Nome Completo</string>
+    <string name="errorSingUp">Obrigatorio</string>
+    <string name="toastSucessNewAccount">Sucesso ao cadastrar usuario</string>
+</resources>
