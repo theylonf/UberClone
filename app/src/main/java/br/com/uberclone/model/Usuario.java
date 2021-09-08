@@ -1,9 +1,23 @@
 package br.com.uberclone.model;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
+
+import br.com.uberclone.config.ConfiguracaoFirebase;
+
 public class Usuario {
     private String id, nome, email, senha, tipo;
 
     public Usuario() {
+    }
+
+    public void salvar(){
+
+        DatabaseReference firebaseRef = ConfiguracaoFirebase.getFirebaseDatabase();
+        DatabaseReference usuarios = firebaseRef.child("usuarios").child(getId());
+
+        usuarios.setValue(this);
+
     }
 
     public String getId() {
@@ -30,6 +44,7 @@ public class Usuario {
         this.email = email;
     }
 
+    @Exclude
     public String getSenha() {
         return senha;
     }

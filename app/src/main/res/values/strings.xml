@@ -12,4 +12,10 @@
     <string name="cadastro_nome">Nome Completo</string>
     <string name="errorSingUp">Obrigatorio</string>
     <string name="toastSucessNewAccount">Sucesso ao cadastrar usuario</string>
+    <string name="SucessCadastroPassageiro">Sucesso ao cadastrar passageiro</string>
+    <string name="SucessCadastroMotorista">Sucesso ao cadastrar Motorista</string>
+    <string name="ExceptionWeakPassword">Digite uma senha mais forte</string>
+    <string name="ExceptionUserCollision">Conta já cadastrada</string>
+    <string name="ExceptionInvalidCredentials">Por favor, digite um e-mail valido</string>
+    <string name="ExceptionGeralRegistroUsuario">\"Erro ao cadastrar usuario: \"</string>
 </resources>

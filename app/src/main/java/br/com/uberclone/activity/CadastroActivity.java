@@ -3,6 +3,7 @@ package br.com.uberclone.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,9 +15,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 
 import br.com.uberclone.R;
 import br.com.uberclone.config.ConfiguracaoFirebase;
+import br.com.uberclone.helper.UsuarioFirebase;
 import br.com.uberclone.model.Usuario;
 
 public class CadastroActivity extends AppCompatActivity {
@@ -90,7 +95,44 @@ public class CadastroActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull @org.jetbrains.annotations.NotNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-                    Toast.makeText(CadastroActivity.this, R.string.toastSucessNewAccount, Toast.LENGTH_SHORT).show();
+                    try {
+                        String idUsuario = task.getResult().getUser().getUid();
+                        usuario.setId(idUsuario);
+                        usuario.salvar();
+
+                        //Atualizar nome no UserProfile;
+                        UsuarioFirebase.atualizarNomeUsuario(usuario.getNome());
+
+                        //Redirecionar o usurario a partir do seu tipo
+                        //Se for um passageiro abrirá  a activity maps
+                        //Senão a activity requisições
+                        if (validarTipoUsuario() == "P"){
+                            startActivity(new Intent(CadastroActivity.this,MapsActivity.class));
+                            finish();
+                            Toast.makeText(CadastroActivity.this, R.string.SucessCadastroPassageiro, Toast.LENGTH_SHORT).show();
+                        }else {
+                            startActivity(new Intent(getApplicationContext(),RequisicoesActivity.class));
+                            finish();
+                            Toast.makeText(CadastroActivity.this, R.string.SucessCadastroMotorista, Toast.LENGTH_SHORT).show();
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }else{
+                    String excessao = "";
+                    try {
+                        throw task.getException();
+                    }catch(FirebaseAuthWeakPasswordException e){
+                        excessao = getString(R.string.ExceptionWeakPassword);
+                    }catch (FirebaseAuthInvalidCredentialsException e){
+                        excessao = getString(R.string.ExceptionInvalidCredentials);
+                    }catch (FirebaseAuthUserCollisionException e){
+                        excessao = getString(R.string.ExceptionUserCollision);
+                    }catch (Exception e){
+                        excessao = getString(R.string.ExceptionGeralRegistroUsuario) + e.getMessage();
+                        e.printStackTrace();
+                    }
+                    Toast.makeText(CadastroActivity.this, excessao, Toast.LENGTH_LONG).show();
                 }
             }
         });
