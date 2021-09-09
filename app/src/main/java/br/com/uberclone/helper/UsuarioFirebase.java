@@ -1,5 +1,7 @@
 package br.com.uberclone.helper;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -10,10 +12,18 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
+import br.com.uberclone.R;
+import br.com.uberclone.activity.MapsActivity;
+import br.com.uberclone.activity.RequisicoesActivity;
 import br.com.uberclone.config.ConfiguracaoFirebase;
+import br.com.uberclone.model.Usuario;
 
 public class UsuarioFirebase {
 
@@ -41,4 +51,37 @@ public class UsuarioFirebase {
             return false;
         }
     }
+
+    public static void redirecionarUsuarioLogado(final Activity activity){
+
+        FirebaseUser user = getUsuarioAtual();
+        if (user != null){
+            DatabaseReference usuariosRef = ConfiguracaoFirebase.getFirebaseDatabase()
+                    .child("usuarios")
+                    .child(get_ID_usuario());
+            usuariosRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                    Usuario usuario = snapshot.getValue(Usuario.class);
+                    String tipoUsuario = usuario.getTipo();
+                    if (tipoUsuario.equals(activity.getString(R.string.tipoMotorista))){
+                        activity.startActivity(new Intent(activity, RequisicoesActivity.class));
+                    }else {
+                        activity.startActivity(new Intent(activity, MapsActivity.class));
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                }
+            });
+        }
+
+    }
+
+    public static String get_ID_usuario(){
+        return getUsuarioAtual().getUid();
+    }
+
 }

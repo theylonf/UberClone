@@ -18,4 +18,5 @@
     <string name="ExceptionUserCollision">Conta já cadastrada</string>
     <string name="ExceptionInvalidCredentials">Por favor, digite um e-mail valido</string>
     <string name="ExceptionGeralRegistroUsuario">\"Erro ao cadastrar usuario: \"</string>
+    <string name="tipoMotorista">M</string>
 </resources>
