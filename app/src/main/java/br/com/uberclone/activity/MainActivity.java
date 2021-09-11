@@ -13,6 +13,8 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.google.firebase.auth.FirebaseUser;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.security.Permissions;
@@ -57,12 +59,12 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         UsuarioFirebase.redirecionarUsuarioLogado(MainActivity.this);
 
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                linearLayout.setVisibility(View.VISIBLE);
-            }
-        },5000);
+        FirebaseUser user = UsuarioFirebase.getUsuarioAtual();
+        if (user == null){
+            linearLayout.setVisibility(View.VISIBLE);
+        }else {
+            linearLayout.setVisibility(View.GONE);
+        }
 
     }
 

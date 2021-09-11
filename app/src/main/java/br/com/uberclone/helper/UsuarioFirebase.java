@@ -69,10 +69,8 @@ public class UsuarioFirebase {
                     String tipoUsuario = usuario.getTipo();
                     if (tipoUsuario.equals(activity.getString(R.string.tipoMotorista))){
                         activity.startActivity(new Intent(activity, RequisicoesActivity.class));
-                        activity.finish();
                     }else{
                         activity.startActivity(new Intent(activity, PassageiroActivity.class));
-                        activity.finish();
                     }
                 }
 

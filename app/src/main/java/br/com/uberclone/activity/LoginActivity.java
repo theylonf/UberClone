@@ -68,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
                     UsuarioFirebase.redirecionarUsuarioLogado(LoginActivity.this);
+                    finish();
                 }else {
                     String excessao = "";
                     try {
