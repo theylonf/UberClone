@@ -1,8 +1,8 @@
 package br.com.uberclone.activity;
 
-import androidx.fragment.app.FragmentActivity;
-
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -10,26 +10,43 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import androidx.navigation.ui.AppBarConfiguration;
+
 
 import br.com.uberclone.R;
-import br.com.uberclone.databinding.ActivityMapsBinding;
+import br.com.uberclone.config.ConfiguracaoFirebase;
+import br.com.uberclone.databinding.ActivityPassageiroBinding;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class PassageiroActivity extends AppCompatActivity implements OnMapReadyCallback {
 
+    private AppBarConfiguration appBarConfiguration;
     private GoogleMap mMap;
-    private ActivityMapsBinding binding;
+    private ActivityPassageiroBinding binding;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityMapsBinding.inflate(getLayoutInflater());
+        binding = ActivityPassageiroBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        setSupportActionBar(binding.toolbar);
+        binding.toolbar.setTitle(getString(R.string.startRun));
+
+        //Configurações iniciais
+        auth = ConfiguracaoFirebase.getFirebaseAuth();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
     }
 
     /**
@@ -49,5 +66,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.menuSair:
+                auth.signOut();
+                finish();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

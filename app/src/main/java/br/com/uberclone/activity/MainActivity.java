@@ -9,11 +9,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.security.Permissions;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import br.com.uberclone.R;
 import br.com.uberclone.config.Permissoes;
@@ -24,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     private String[] permissoes = new String[]{
             Manifest.permission.ACCESS_FINE_LOCATION,
     };
+    private LinearLayout linearLayout;
+    private Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         Permissoes.validarPermissoes(permissoes,this,1);
 
+        linearLayout = findViewById(R.id.mainLinearLayout);
 
     }
 
@@ -49,6 +56,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         UsuarioFirebase.redirecionarUsuarioLogado(MainActivity.this);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                linearLayout.setVisibility(View.VISIBLE);
+            }
+        },5000);
+
     }
 
     @Override

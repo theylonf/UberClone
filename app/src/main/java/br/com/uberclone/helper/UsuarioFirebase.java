@@ -3,7 +3,8 @@ package br.com.uberclone.helper;
 import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 
@@ -20,12 +21,14 @@ import com.google.firebase.database.ValueEventListener;
 import org.jetbrains.annotations.NotNull;
 
 import br.com.uberclone.R;
-import br.com.uberclone.activity.MapsActivity;
+import br.com.uberclone.activity.PassageiroActivity;
 import br.com.uberclone.activity.RequisicoesActivity;
 import br.com.uberclone.config.ConfiguracaoFirebase;
 import br.com.uberclone.model.Usuario;
 
 public class UsuarioFirebase {
+
+    private LinearLayout linearLayout;
 
     public static FirebaseUser getUsuarioAtual(){
         FirebaseAuth usuario = ConfiguracaoFirebase.getFirebaseAuth();
@@ -66,8 +69,10 @@ public class UsuarioFirebase {
                     String tipoUsuario = usuario.getTipo();
                     if (tipoUsuario.equals(activity.getString(R.string.tipoMotorista))){
                         activity.startActivity(new Intent(activity, RequisicoesActivity.class));
-                    }else {
-                        activity.startActivity(new Intent(activity, MapsActivity.class));
+                        activity.finish();
+                    }else{
+                        activity.startActivity(new Intent(activity, PassageiroActivity.class));
+                        activity.finish();
                     }
                 }
 
