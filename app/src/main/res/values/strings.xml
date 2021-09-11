@@ -33,4 +33,13 @@
     <string name="myLocal">Meu local</string>
     <string name="callUber">Chamar uber</string>
     <string name="tipoPassageiro">P</string>
+    <string name="setDestinoAddrs">Informe o endereço de destino</string>
+    <string name="cityDestiny">\"Cidade: \"</string>
+    <string name="ThoroughfareDestiny">\"\nRua: \"</string>
+    <string name="subLocalityDestiny">\"\nBairro: \"</string>
+    <string name="NumberLocality">\"\nNúmero: \"</string>
+    <string name="postalCodeDestiny">\"\nCep: \"</string>
+    <string name="confirmAddrs">Confirme o endereço</string>
+    <string name="confirm">Confirmar</string>
+    <string name="cancel">Cancelar</string>
 </resources>

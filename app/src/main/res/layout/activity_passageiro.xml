@@ -71,6 +71,7 @@
         android:layout_height="60dp"
         android:text="@string/callUber"
         android:layout_gravity="bottom"
-        android:theme="@style/botaoPadrao"/>
+        android:theme="@style/botaoPadrao"
+        android:onClick="chamarUber"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
