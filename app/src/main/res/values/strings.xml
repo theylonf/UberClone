@@ -42,4 +42,5 @@
     <string name="confirmAddrs">Confirme o endereço</string>
     <string name="confirm">Confirmar</string>
     <string name="cancel">Cancelar</string>
+    <string name="waitingLocation">Aguarde, Estamos recuperando sua localização</string>
 </resources>

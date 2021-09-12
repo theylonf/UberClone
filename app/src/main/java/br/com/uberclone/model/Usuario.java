@@ -6,7 +6,7 @@ import com.google.firebase.database.Exclude;
 import br.com.uberclone.config.ConfiguracaoFirebase;
 
 public class Usuario {
-    private String id, nome, email, senha, tipo;
+    private String id, nome, email, senha, tipo, latitude, longitude;
 
     public Usuario() {
     }
@@ -18,6 +18,22 @@ public class Usuario {
 
         usuarios.setValue(this);
 
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
     }
 
     public String getId() {

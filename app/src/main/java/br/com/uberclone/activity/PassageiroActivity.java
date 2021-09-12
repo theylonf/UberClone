@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -30,7 +29,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.core.app.ActivityCompat;
-import androidx.navigation.ui.AppBarConfiguration;
 
 
 import java.io.IOException;
@@ -40,7 +38,10 @@ import java.util.Locale;
 import br.com.uberclone.R;
 import br.com.uberclone.config.ConfiguracaoFirebase;
 import br.com.uberclone.databinding.ActivityPassageiroBinding;
+import br.com.uberclone.helper.UsuarioFirebase;
 import br.com.uberclone.model.Destino;
+import br.com.uberclone.model.Requisicao;
+import br.com.uberclone.model.Usuario;
 
 public class PassageiroActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -49,6 +50,7 @@ public class PassageiroActivity extends AppCompatActivity implements OnMapReadyC
     private FirebaseAuth auth;
     private LocationManager locationManager;
     private LocationListener locationListener;
+    private LatLng localPassageiro;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,48 +81,63 @@ public class PassageiroActivity extends AppCompatActivity implements OnMapReadyC
     public void chamarUber(View view) {
         String textoDestino = binding.editDestino.getText().toString();
 
-        if (!textoDestino.equals("") || textoDestino != null){
-            Address addressDestino = recuperarEndereco(textoDestino);
-            if (addressDestino != null){
-                Destino destino = new Destino();
-                destino.setCidade(addressDestino.getAdminArea());
-                destino.setCep(addressDestino.getPostalCode());
-                destino.setBairro(addressDestino.getSubLocality());
-                destino.setRua(addressDestino.getThoroughfare());
-                destino.setNumero(addressDestino.getFeatureName());
+        if (confirmadoLocalizacaoUsuario()){
+            if (!textoDestino.equals("") || textoDestino != null){
+                Address addressDestino = recuperarEndereco(textoDestino);
+                if (addressDestino != null){
+                    Destino destino = new Destino();
+                    destino.setCidade(addressDestino.getAdminArea());
+                    destino.setCep(addressDestino.getPostalCode());
+                    destino.setBairro(addressDestino.getSubLocality());
+                    destino.setRua(addressDestino.getThoroughfare());
+                    destino.setNumero(addressDestino.getFeatureName());
 
-                destino.setLatitude(String.valueOf(addressDestino.getLatitude()));
-                destino.setLongitude(String.valueOf(addressDestino.getLongitude()));
+                    destino.setLatitude(String.valueOf(addressDestino.getLatitude()));
+                    destino.setLongitude(String.valueOf(addressDestino.getLongitude()));
 
-                StringBuilder menssagem = new StringBuilder();
-                menssagem.append(getString(R.string.cityDestiny)+ destino.getCidade());
-                menssagem.append(getString(R.string.ThoroughfareDestiny)+ destino.getRua());
-                menssagem.append(getString(R.string.subLocalityDestiny)+destino.getBairro());
-                menssagem.append(getString(R.string.NumberLocality)+destino.getNumero());
-                menssagem.append(getString(R.string.postalCodeDestiny)+destino.getNumero());
+                    StringBuilder menssagem = new StringBuilder();
+                    menssagem.append(getString(R.string.cityDestiny)+ destino.getCidade());
+                    menssagem.append(getString(R.string.ThoroughfareDestiny)+ destino.getRua());
+                    menssagem.append(getString(R.string.subLocalityDestiny)+destino.getBairro());
+                    menssagem.append(getString(R.string.NumberLocality)+destino.getNumero());
+                    menssagem.append(getString(R.string.postalCodeDestiny)+destino.getNumero());
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                        .setTitle(getString(R.string.confirmAddrs))
-                        .setMessage(menssagem)
-                        .setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //Salvar requisição
-                            }
-                        }).setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                            .setTitle(getString(R.string.confirmAddrs))
+                            .setMessage(menssagem)
+                            .setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //Salvar requisição
+                                    salvarRequisicao(destino);
+                                }
+                            }).setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
 
-                            }
-                        });
-                AlertDialog dialog = builder.create();
-                dialog.show();
-
-
+                                }
+                            });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+            }else {
+                Toast.makeText(this, R.string.setDestinoAddrs, Toast.LENGTH_SHORT).show();
             }
         }else {
-            Toast.makeText(this, R.string.setDestinoAddrs, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.waitingLocation, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void salvarRequisicao(Destino destino) {
+        Requisicao requisicao = new Requisicao();
+        requisicao.setDestino(destino);
+        Usuario usuarioPassageiro = UsuarioFirebase.getDadosUsuarioAtual();
+        usuarioPassageiro.setLatitude(String.valueOf(localPassageiro.latitude));
+        usuarioPassageiro.setLongitude(String.valueOf(localPassageiro.longitude));
+
+        requisicao.setPassageiro(usuarioPassageiro);
+        requisicao.setStatus(Requisicao.STATUS_AGUARDANDO);
+        requisicao.salvarRequisicao();
     }
 
     private Address recuperarEndereco(String endereco){
@@ -138,6 +155,12 @@ public class PassageiroActivity extends AppCompatActivity implements OnMapReadyC
         return null;
     }
 
+    private boolean confirmadoLocalizacaoUsuario(){
+        if (localPassageiro != null){
+            return true;
+        }else return false;
+    }
+
     private void recuperarLocalizacaoUsuario() {
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -148,17 +171,17 @@ public class PassageiroActivity extends AppCompatActivity implements OnMapReadyC
                 //Recuperar latitude e longitude
                 double latitude = location.getLatitude();
                 double longitude = location.getLongitude();
-                LatLng meuLocal = new LatLng(latitude, longitude);
+                localPassageiro = new LatLng(latitude, longitude);
 
                 mMap.clear();
                 mMap.addMarker(
                         new MarkerOptions()
-                                .position(meuLocal)
+                                .position(localPassageiro)
                                 .title(getString(R.string.myLocal))
                                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.usuario))
                 );
                 mMap.moveCamera(
-                        CameraUpdateFactory.newLatLngZoom(meuLocal, 18)
+                        CameraUpdateFactory.newLatLngZoom(localPassageiro, 18)
                 );
             }
             @Override
