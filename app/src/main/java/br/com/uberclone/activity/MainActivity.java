@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.google.firebase.auth.FirebaseUser;
 
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
             Manifest.permission.ACCESS_FINE_LOCATION,
     };
     private LinearLayout linearLayout;
-    private Handler handler = new Handler();
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         Permissoes.validarPermissoes(permissoes,this,1);
 
         linearLayout = findViewById(R.id.mainLinearLayout);
+        progressBar = findViewById(R.id.progressBar);
 
     }
 
@@ -57,14 +59,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        UsuarioFirebase.redirecionarUsuarioLogado(MainActivity.this);
-
         FirebaseUser user = UsuarioFirebase.getUsuarioAtual();
         if (user == null){
             linearLayout.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
         }else {
             linearLayout.setVisibility(View.GONE);
         }
+        UsuarioFirebase.redirecionarUsuarioLogado(MainActivity.this);
 
     }
 

@@ -13,4 +13,5 @@
 
     <color name="btn_Enter">#1FBAD6</color>
     <color name="btn_Cadastrar">#83838C</color>
+    <color name="btn_cancelar">#CA0B0B</color>
 </resources>

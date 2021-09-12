@@ -43,4 +43,5 @@
     <string name="confirm">Confirmar</string>
     <string name="cancel">Cancelar</string>
     <string name="waitingLocation">Aguarde, Estamos recuperando sua localização</string>
+    <string name="cancelUber">Cancelar Uber</string>
 </resources>

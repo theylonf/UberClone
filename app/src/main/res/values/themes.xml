@@ -20,6 +20,12 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="botaoCancelar" parent="Theme.AppCompat.Light">
+        <item name="colorControlHighlight">@color/btn_cancelar</item>
+        <item name="colorButtonNormal">@color/btn_cancelar</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
     <style name="Theme.UberClone.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

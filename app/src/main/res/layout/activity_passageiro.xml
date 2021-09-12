@@ -24,6 +24,7 @@
     <include layout="@layout/content_passageiro" />
 
     <LinearLayout
+        android:id="@+id/linearLayoutDestino"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -31,8 +32,7 @@
         android:layout_marginRight="16dp"
         android:background="@drawable/background_round"
         android:orientation="vertical"
-        android:padding="8dp"
-        >
+        android:padding="8dp">
 
         <EditText
             android:id="@+id/editLocal"
@@ -55,8 +55,8 @@
             android:layout_height="40dp"
             android:background="@color/white"
             android:drawableLeft="@drawable/circulo_verde"
-            android:drawableTint="@android:color/darker_gray"
             android:drawablePadding="6dp"
+            android:drawableTint="@android:color/darker_gray"
             android:ems="10"
             android:hint="@string/whereGo"
             android:inputType="textPersonName"
@@ -66,7 +66,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/btnChamarUber"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:text="@string/callUber"
