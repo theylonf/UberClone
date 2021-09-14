@@ -2,6 +2,8 @@ package br.com.uberclone.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -21,15 +23,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.uberclone.R;
+import br.com.uberclone.adapter.RequisicoesAdapter;
 import br.com.uberclone.config.ConfiguracaoFirebase;
 import br.com.uberclone.databinding.ActivityRequisicoesBinding;
+import br.com.uberclone.helper.UsuarioFirebase;
 import br.com.uberclone.model.Requisicao;
+import br.com.uberclone.model.Usuario;
 
 public class RequisicoesActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private DatabaseReference firebaseRef;
     private ActivityRequisicoesBinding binding;
     private List<Requisicao> listaRequisicao = new ArrayList<>();
+    private RequisicoesAdapter adapter;
+    private Usuario motorista;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,14 +55,16 @@ public class RequisicoesActivity extends AppCompatActivity {
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 if (snapshot.getChildrenCount() >0){
                     binding.textResultado.setVisibility(View.GONE);
-                    binding.recyclerView.setVisibility(View.VISIBLE);
+                    binding.recyclerRequisicoes.setVisibility(View.VISIBLE);
                 }else {
                     binding.textResultado.setVisibility(View.VISIBLE);
-                    binding.recyclerView.setVisibility(View.GONE);
+                    binding.recyclerRequisicoes.setVisibility(View.GONE);
                 }
                 for (DataSnapshot ds: snapshot.getChildren()){
                     Requisicao requisicao = ds.getValue(Requisicao.class);
+                    listaRequisicao.add(requisicao);
                 }
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -89,7 +98,16 @@ public class RequisicoesActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(R.string.requisicoes);
 
         //Configurações iniciais
+        motorista = UsuarioFirebase.getDadosUsuarioAtual();
         auth = ConfiguracaoFirebase.getFirebaseAuth();
         firebaseRef = ConfiguracaoFirebase.getFirebaseDatabase();
+
+        //Configurando RecyclerView
+        adapter = new RequisicoesAdapter(listaRequisicao,getApplicationContext(),motorista);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        binding.recyclerRequisicoes.setLayoutManager(layoutManager);
+        binding.recyclerRequisicoes.setHasFixedSize(true);
+        binding.recyclerRequisicoes.setAdapter(adapter);
+
     }
 }
