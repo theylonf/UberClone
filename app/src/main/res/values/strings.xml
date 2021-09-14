@@ -46,4 +46,6 @@
     <string name="cancelUber">Cancelar Uber</string>
     <string name="requisicoes">Requisições</string>
     <string name="waitingRequisicoes">Agurdando requisições</string>
+    <string name="title_activity_corrida">CorridaActivity</string>
+    <string name="acceptRace">Aceitar corrida</string>
 </resources>

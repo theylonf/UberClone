@@ -3,9 +3,11 @@ package br.com.uberclone.model;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 
+import java.io.Serializable;
+
 import br.com.uberclone.config.ConfiguracaoFirebase;
 
-public class Usuario {
+public class Usuario implements Serializable {
     private String id, nome, email, senha, tipo, latitude, longitude;
 
     public Usuario() {

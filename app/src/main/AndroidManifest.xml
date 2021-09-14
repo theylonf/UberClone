@@ -17,9 +17,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UberClone">
         <activity
+            android:name=".activity.CorridaActivity"
+            android:label="@string/title_activity_corrida"
+            android:theme="@style/Theme.UberClone.NoActionBar"
+            android:parentActivityName=".activity.RequisicoesActivity"></activity>
+        <activity
             android:name=".activity.PassageiroActivity"
             android:label="@string/title_activity_passageiro"
-            android:theme="@style/Theme.UberClone.NoActionBar"></activity>
+            android:theme="@style/Theme.UberClone.NoActionBar" />
         <activity android:name=".activity.RequisicoesActivity" />
         <activity
             android:name=".activity.CadastroActivity"
