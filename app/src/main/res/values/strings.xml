@@ -44,4 +44,6 @@
     <string name="cancel">Cancelar</string>
     <string name="waitingLocation">Aguarde, Estamos recuperando sua localização</string>
     <string name="cancelUber">Cancelar Uber</string>
+    <string name="requisicoes">Requisições</string>
+    <string name="waitingRequisicoes">Agurdando requisições</string>
 </resources>

@@ -90,14 +90,16 @@ public class PassageiroActivity extends AppCompatActivity implements OnMapReadyC
                     list.add(requisicao);
                 }
                 Collections.reverse(list);
-                requisicao = list.get(0);
+                if (list != null && list.size()>0){
+                    requisicao = list.get(0);
 
-                switch (requisicao.getStatus()){
-                    case Requisicao.STATUS_AGUARDANDO:
-                        binding.linearLayoutDestino.setVisibility(View.GONE);
-                        binding.btnChamarUber.setText(R.string.cancelUber);
-                        uberChamado = true;
-                        break;
+                    switch (requisicao.getStatus()){
+                        case Requisicao.STATUS_AGUARDANDO:
+                            binding.linearLayoutDestino.setVisibility(View.GONE);
+                            binding.btnChamarUber.setText(R.string.cancelUber);
+                            uberChamado = true;
+                            break;
+                    }
                 }
             }
 
