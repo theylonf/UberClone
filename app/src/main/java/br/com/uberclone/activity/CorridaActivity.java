@@ -21,6 +21,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -43,11 +45,12 @@ public class CorridaActivity extends AppCompatActivity implements OnMapReadyCall
     private FirebaseAuth auth;
     private LocationManager locationManager;
     private LocationListener locationListener;
-    private LatLng localMotorista;
-    private Usuario motorista;
+    private LatLng localMotorista, localPassageiro;
+    private Usuario motorista, passageiro;
     private String idRequisicao;
     private Requisicao requisicao;
     private DatabaseReference firebaseRef;
+    private Marker marcadorMotorista, marcadorPassageiro;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +76,12 @@ public class CorridaActivity extends AppCompatActivity implements OnMapReadyCall
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                 //Recuperar requisicao
                 requisicao = snapshot.getValue(Requisicao.class);
+                passageiro = requisicao.getPassageiro();
+                localPassageiro = new LatLng(
+                        Double.parseDouble(passageiro.getLatitude()),
+                        Double.parseDouble(passageiro.getLongitude())
+                );
+
                 switch (requisicao.getStatus()){
                     case Requisicao.STATUS_AGUARDANDO:
                         requisicaoAguardando();
@@ -96,6 +105,52 @@ public class CorridaActivity extends AppCompatActivity implements OnMapReadyCall
 
     private void requisicaoAcaminho() {
         binding.btnAceitarCorrida.setText(R.string.cancelRace);
+        //Exibir marcador do motorista
+        adicionarMarcadorMotorista(localMotorista,motorista.getNome());
+
+        //Exibir marcador do passageiro
+        adicionarMarcadorPassageiro(localPassageiro, passageiro.getNome());
+
+        //Centralizar Marcadores
+        centralizarMarcadores(marcadorMotorista, marcadorPassageiro);
+
+    }
+
+    private void centralizarMarcadores(Marker marker1, Marker marker2) {
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        builder.include(marker1.getPosition());
+        builder.include(marker2.getPosition());
+
+        LatLngBounds bounds = builder.build();
+        int largura = getResources().getDisplayMetrics().widthPixels;
+        int altura = getResources().getDisplayMetrics().heightPixels;
+        int padding = (int) (largura*0.2);
+
+        mMap.moveCamera(
+                CameraUpdateFactory.newLatLngBounds(bounds,largura,altura,padding)
+        );
+    }
+
+    private void adicionarMarcadorPassageiro(LatLng localizacao, String titulo) {
+        if (marcadorPassageiro != null) marcadorPassageiro.remove();
+
+        marcadorPassageiro = mMap.addMarker(
+                new MarkerOptions()
+                        .position(localizacao)
+                        .title(titulo)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.usuario))
+        );
+    }
+
+    private void adicionarMarcadorMotorista(LatLng localizacao, String titulo) {
+        if (marcadorMotorista != null) marcadorMotorista.remove();
+
+        marcadorMotorista = mMap.addMarker(
+                new MarkerOptions()
+                        .position(localizacao)
+                        .title(titulo)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.carro))
+        );
     }
 
     public void aceitarCorrida(View view) {
