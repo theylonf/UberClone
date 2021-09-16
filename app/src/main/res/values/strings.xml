@@ -48,4 +48,6 @@
     <string name="waitingRequisicoes">Agurdando requisições</string>
     <string name="title_activity_corrida">CorridaActivity</string>
     <string name="acceptRace">Aceitar corrida</string>
+    <string name="cancelRace">Cancelar corrida</string>
+    <string name="acceptRace">Aceitar corrida</string>
 </resources>

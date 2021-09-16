@@ -2,6 +2,9 @@ package br.com.uberclone.model;
 
 import com.google.firebase.database.DatabaseReference;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import br.com.uberclone.config.ConfiguracaoFirebase;
 
 public class Requisicao {
@@ -25,6 +28,19 @@ public class Requisicao {
         setId(idRequisicao);
 
         requisicoes.child(getId()).setValue(this);
+    }
+
+    public void atualizarRequisicao(){
+        DatabaseReference reference = ConfiguracaoFirebase.getFirebaseDatabase();
+        DatabaseReference requisicoes = reference.child("requisicoes");
+
+        DatabaseReference requisicao = requisicoes.child(getId());
+        Map map = new HashMap();
+        map.put("motorista",getMotorista());
+        map.put("status", getStatus());
+
+        requisicao.updateChildren(map);
+
     }
 
     public String getId() {
