@@ -1,3 +1,3 @@
 # UberClone
-<p>Uber Clone, training skills Java and GPS manager in Android Studio <br/>
+<p>Uber Clone, Java skills training using GPS in Android Studio 4.1 <br/>
 Teacher: Jamilton Damasceno / Udemy :neckbeard::computer:</p>
