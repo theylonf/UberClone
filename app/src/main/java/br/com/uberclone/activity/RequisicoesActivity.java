@@ -65,6 +65,38 @@ public class RequisicoesActivity extends AppCompatActivity {
         recuperarLocalizacaoUsuario();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        verificaStatusRequisicao();
+    }
+
+    private void verificaStatusRequisicao(){
+        Usuario usuarioLogado = UsuarioFirebase.getDadosUsuarioAtual();
+        DatabaseReference reference = ConfiguracaoFirebase.getFirebaseDatabase();
+
+        DatabaseReference requisicoes = reference.child("requisicoes");
+
+        Query requisicoesPesquisa = requisicoes.orderByChild("motorista/id")
+                .equalTo(usuarioLogado.getId());
+        requisicoesPesquisa.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                for (DataSnapshot ds: snapshot.getChildren()){
+                    Requisicao requisicao = ds.getValue(Requisicao.class);
+                    if (requisicao.getStatus().equals(Requisicao.STATUS_A_CAMINHO) || requisicao.getStatus().equals(Requisicao.STATUS_VIAGEM)){
+                        abrirTelaCorrida(requisicao.getId(),motorista,true);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+    }
+
     private void recuperarRequisicoes() {
         DatabaseReference requisicoes = firebaseRef.child("requisicoes");
         Query requisicaoPesquisa = requisicoes.orderByChild("status")
@@ -159,6 +191,15 @@ public class RequisicoesActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void abrirTelaCorrida(String idRequisicao,Usuario motorista, boolean requisicaoAtiva) {
+        Intent i = new Intent(RequisicoesActivity.this,CorridaActivity.class);
+        i.putExtra("idRequisicao", idRequisicao);
+        i.putExtra("motorista",motorista);
+        i.putExtra("requisicaoAtiva",requisicaoAtiva);
+        startActivity(i);
+    }
+
     private void inicializarComponentes() {
         binding = ActivityRequisicoesBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -184,10 +225,7 @@ public class RequisicoesActivity extends AppCompatActivity {
             @Override
             public void onItemClick(View view, int position) {
                 Requisicao requisicao = listaRequisicao.get(position);
-                Intent i = new Intent(RequisicoesActivity.this,CorridaActivity.class);
-                i.putExtra("idRequisicao", requisicao.getId());
-                i.putExtra("motorista",motorista);
-                startActivity(i);
+                abrirTelaCorrida(requisicao.getId(),motorista,false);
             }
 
             @Override
