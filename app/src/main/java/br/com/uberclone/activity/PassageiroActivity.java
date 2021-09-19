@@ -225,6 +225,9 @@ public class PassageiroActivity extends AppCompatActivity implements OnMapReadyC
                 double longitude = location.getLongitude();
                 localPassageiro = new LatLng(latitude, longitude);
 
+                //Atualizar Geofire
+                UsuarioFirebase.atualizarDadosLocalizacao(latitude,longitude);
+
                 mMap.clear();
                 mMap.addMarker(
                         new MarkerOptions()
@@ -264,6 +267,7 @@ public class PassageiroActivity extends AppCompatActivity implements OnMapReadyC
 
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
