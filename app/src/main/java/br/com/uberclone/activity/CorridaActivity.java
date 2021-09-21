@@ -42,6 +42,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 
+import org.jetbrains.annotations.NotNull;
+
 import br.com.uberclone.R;
 import br.com.uberclone.config.ConfiguracaoFirebase;
 import br.com.uberclone.helper.UsuarioFirebase;
@@ -101,7 +103,7 @@ public class CorridaActivity extends AppCompatActivity
                 .child( idRequisicao );
         requisicoes.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
 
                 //Recupera requisição
                 requisicao = dataSnapshot.getValue(Requisicao.class);
@@ -120,7 +122,7 @@ public class CorridaActivity extends AppCompatActivity
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NotNull DatabaseError databaseError) {
 
             }
         });
@@ -161,10 +163,13 @@ public class CorridaActivity extends AppCompatActivity
 
         //Centralizar marcadores motorista/ destino
         centralizarDoisMarcadores(marcadorMotorista,marcadorDestino);
+
+        //Iniciar monitoramento
+        iniciarMonitoramento(motorista,localDestino,Requisicao.STATUS_FINALIZDA);
     }
 
     private void requisicaoAguardando(){
-        buttonAceitarCorrida.setText("Aceitar corrida");
+        buttonAceitarCorrida.setText(R.string.acceptRace);
 
         //Exibe marcador do motorista
         adicionaMarcadorMotorista(localMotorista, motorista.getNome() );
@@ -176,7 +181,7 @@ public class CorridaActivity extends AppCompatActivity
     }
 
     private void requisicaoACaminho(){
-        buttonAceitarCorrida.setText("A caminho do passageiro");
+        buttonAceitarCorrida.setText(R.string.em_viagem);
         fabRota.setVisibility(View.VISIBLE);
 
         //Exibe marcador do motorista
@@ -189,11 +194,11 @@ public class CorridaActivity extends AppCompatActivity
         centralizarDoisMarcadores(marcadorMotorista, marcadorPassageiro);
 
         //Iniciar monitoramento do motorista / passageiro
-        iniciarMonitoramentoCorrida(passageiro,motorista);
+        iniciarMonitoramento(motorista,localPassageiro,Requisicao.STATUS_VIAGEM);
 
     }
 
-    private void iniciarMonitoramentoCorrida(Usuario passageiro, Usuario motorista) {
+    private void iniciarMonitoramento(Usuario uOrigem, LatLng localDestino, String status) {
         //Inicializar Geofire
         DatabaseReference localUsuario = ConfiguracaoFirebase.getFirebaseDatabase()
                 .child("local_usuario");
@@ -202,22 +207,22 @@ public class CorridaActivity extends AppCompatActivity
         //Adicionar circulo no mapa
         Circle circle = mMap.addCircle(
                 new CircleOptions()
-                .center(localPassageiro)
+                .center(localDestino)
                 .radius(50)//Em metros
                 .fillColor(Color.argb(90,255,153,0))
                 .strokeColor(Color.argb(190,255,153,0))
         );
 
         GeoQuery geoQuery = geoFire.queryAtLocation(
-                new GeoLocation(localPassageiro.latitude,localPassageiro.longitude),
+                new GeoLocation(localDestino.latitude,localDestino.longitude),
                 0.05//Em Km
         );
         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
             @Override
             public void onKeyEntered(String key, GeoLocation location) {
-                if (key.equals(motorista.getId())){
+                if (key.equals(uOrigem.getId())){
                     //Alterar Status da Requisição
-                    requisicao.setStatus(Requisicao.STATUS_VIAGEM);
+                    requisicao.setStatus(status);
                     requisicao.atualizaStatus();
 
                     //Remover Listenners
