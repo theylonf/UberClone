@@ -128,9 +128,12 @@ public class RequisicoesActivity extends AppCompatActivity {
                 if( !latitude.isEmpty() && !longitude.isEmpty() ){
                     motorista.setLatitude(latitude);
                     motorista.setLongitude(longitude);
+
+                    //Adiciona evento de clique no recycler
+                    adicionarEventoDeCliqueNoRecycler();
                     locationManager.removeUpdates(locationListener);
                     adapter.notifyDataSetChanged();
-                }
+                }else Toast.makeText(RequisicoesActivity.this, R.string.waitingLocation, Toast.LENGTH_SHORT).show();
 
             }
 
@@ -213,7 +216,11 @@ public class RequisicoesActivity extends AppCompatActivity {
         recyclerRequisicoes.setHasFixedSize(true);
         recyclerRequisicoes.setAdapter( adapter );
 
-        //Adiciona evento de clique no recycler
+        recuperarRequisicoes();
+
+    }
+
+    private void adicionarEventoDeCliqueNoRecycler() {
         recyclerRequisicoes.addOnItemTouchListener(
                 new RecyclerItemClickListener(
                         getApplicationContext(),
@@ -237,9 +244,6 @@ public class RequisicoesActivity extends AppCompatActivity {
                         }
                 )
         );
-
-        recuperarRequisicoes();
-
     }
 
     private void recuperarRequisicoes(){

@@ -49,4 +49,6 @@
     <string name="title_activity_corrida">CorridaActivity</string>
     <string name="acceptRace">Aceitar corrida</string>
     <string name="cancelRace">Cancelar corrida</string>
+    <string name="em_viagem">A caminho do destino</string>
+    <string name="destination">Destino</string>
 </resources>
