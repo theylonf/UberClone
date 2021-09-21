@@ -142,8 +142,32 @@ public class CorridaActivity extends AppCompatActivity
             case Requisicao.STATUS_VIAGEM:
                 requisicaoViagem();
                 break;
+            case Requisicao.STATUS_FINALIZDA:
+                requisicaoFinalisada();
+                break;
         }
 
+    }
+
+    private void requisicaoFinalisada() {
+        //Alterar Interface
+        fabRota.setVisibility(View.GONE);
+
+        if( marcadorMotorista != null )
+            marcadorMotorista.remove();
+
+        if( marcadorDestino != null )
+            marcadorDestino.remove();
+
+        LatLng localDestino = new LatLng(
+                Double.parseDouble(destino.getLatitude()),
+                Double.parseDouble(destino.getLongitude())
+        );
+        adicionaMarcadorDestino(localDestino, String.valueOf(R.string.destination));
+
+        centralizarMarcador(localDestino);
+
+        buttonAceitarCorrida.setText(R.string.finishRace);
     }
 
     private void requisicaoViagem() {
@@ -174,9 +198,7 @@ public class CorridaActivity extends AppCompatActivity
         //Exibe marcador do motorista
         adicionaMarcadorMotorista(localMotorista, motorista.getNome() );
 
-        mMap.moveCamera(
-                CameraUpdateFactory.newLatLngZoom(localMotorista, 20)
-        );
+        centralizarMarcador(localMotorista);
 
     }
 
@@ -251,6 +273,12 @@ public class CorridaActivity extends AppCompatActivity
 
             }
         });
+    }
+
+    private void centralizarMarcador(LatLng local){
+        mMap.moveCamera(
+                CameraUpdateFactory.newLatLngZoom(local, 20)
+        );
     }
 
     private void centralizarDoisMarcadores(Marker marcador1, Marker marcador2){

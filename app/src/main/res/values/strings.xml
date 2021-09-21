@@ -51,4 +51,5 @@
     <string name="cancelRace">Cancelar corrida</string>
     <string name="em_viagem">A caminho do destino</string>
     <string name="destination">Destino</string>
+    <string name="finishRace">Corrida finalizada</string>
 </resources>
