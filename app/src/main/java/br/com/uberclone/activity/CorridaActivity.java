@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +35,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -51,6 +53,7 @@ public class CorridaActivity extends AppCompatActivity
 
     //componente
     private Button buttonAceitarCorrida;
+    private FloatingActionButton fabRota;
 
     private GoogleMap mMap;
     private LocationManager locationManager;
@@ -149,6 +152,7 @@ public class CorridaActivity extends AppCompatActivity
 
     private void requisicaoACaminho(){
         buttonAceitarCorrida.setText("A caminho do passageiro");
+        fabRota.setVisibility(View.VISIBLE);
 
         //Exibe marcador do motorista
         adicionaMarcadorMotorista(localMotorista, motorista.getNome() );
@@ -354,6 +358,7 @@ public class CorridaActivity extends AppCompatActivity
         getSupportActionBar().setTitle("Iniciar corrida");
 
         buttonAceitarCorrida = findViewById(R.id.btnAceitarCorrida);
+        fabRota = findViewById(R.id.fabRota);
 
         //Configurações iniciais
         firebaseRef = ConfiguracaoFirebase.getFirebaseDatabase();
@@ -362,6 +367,34 @@ public class CorridaActivity extends AppCompatActivity
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        //Adicionar evento de clique no FabRota
+        fabRota.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String status = statusRequisicao;
+                if (status != null && !status.isEmpty()){
+                    String lat = "";
+                    String lon = "";
+                    switch ( status ){
+                        case Requisicao.STATUS_A_CAMINHO :
+                            lat = String.valueOf(localPassageiro.latitude);
+                            lon = String.valueOf(localPassageiro.longitude);
+                            break;
+                        case Requisicao.STATUS_VIAGEM:
+
+                            break;
+                    }
+                    //Abrir Rota
+                    String latLong = lat + "," +lon;
+                    Uri uri = Uri.parse("google.navigation:q="+latLong+"&mode=d");
+                    Intent i = new Intent(Intent.ACTION_VIEW, uri);
+                    i.setPackage("com.google.android.apps.maps");
+                    startActivity(i);
+                }
+            }
+        });
+
     }
 
     @Override
