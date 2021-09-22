@@ -52,4 +52,6 @@
     <string name="em_viagem">A caminho do destino</string>
     <string name="destination">Destino</string>
     <string name="finishRace">Corrida finalizada</string>
+    <string name="driver_is_comming">Motorista está a caminho</string>
+    <string name="to_destination">A caminho do destino</string>
 </resources>

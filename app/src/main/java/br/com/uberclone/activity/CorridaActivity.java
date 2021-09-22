@@ -146,13 +146,13 @@ public class CorridaActivity extends AppCompatActivity
                 requisicaoViagem();
                 break;
             case Requisicao.STATUS_FINALIZDA:
-                requisicaoFinalisada();
+                requisicaoFinalizada();
                 break;
         }
 
     }
 
-    private void requisicaoFinalisada() {
+    private void requisicaoFinalizada() {
         //Alterar Interface
         fabRota.setVisibility(View.GONE);
         requisicaoAtiva = false;
@@ -177,7 +177,7 @@ public class CorridaActivity extends AppCompatActivity
         DecimalFormat decimalFormat = new DecimalFormat("0.00");
         String resultado  = decimalFormat.format(valor);
 
-        buttonAceitarCorrida.setText(getString(R.string.finishRace) + "R$ "+ resultado);
+        buttonAceitarCorrida.setText(getString(R.string.finishRace) + " R$ "+ resultado);
     }
 
     private void requisicaoViagem() {
@@ -387,6 +387,12 @@ public class CorridaActivity extends AppCompatActivity
 
                 //Atualizar GeoFire
                 UsuarioFirebase.atualizarDadosLocalizacao(latitude, longitude);
+
+                //Atualizar localização no Firebase
+                motorista.setLatitude(String.valueOf(latitude));
+                motorista.setLongitude(String.valueOf(longitude));
+                requisicao.setMotorista(motorista);
+                requisicao.atualizarLocalizacaoMotorista();
 
                 alteraInterfaceStatusRequisicao(statusRequisicao);
 

@@ -55,6 +55,20 @@ public class Requisicao {
 
     }
 
+    public void atualizarLocalizacaoMotorista(){
+        DatabaseReference reference = ConfiguracaoFirebase.getFirebaseDatabase();
+        DatabaseReference requisicoes = reference.child("requisicoes");
+
+        DatabaseReference requisicao = requisicoes.child(getId())
+                .child("motorista");
+        Map map = new HashMap();
+        map.put("latitude",motorista.getLatitude());
+        map.put("longitude", motorista.getLongitude());
+
+        requisicao.updateChildren(map);
+
+    }
+
     public String getId() {
         return id;
     }
