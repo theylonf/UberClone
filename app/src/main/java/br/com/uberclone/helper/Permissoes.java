@@ -1,4 +1,4 @@
-package br.com.uberclone.config;
+package br.com.uberclone.helper;
 
 import android.app.Activity;
 import android.content.pm.PackageManager;

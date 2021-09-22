@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -18,12 +17,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.security.Permissions;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import br.com.uberclone.R;
-import br.com.uberclone.config.Permissoes;
+import br.com.uberclone.helper.Permissoes;
 import br.com.uberclone.helper.UsuarioFirebase;
 
 public class MainActivity extends AppCompatActivity {

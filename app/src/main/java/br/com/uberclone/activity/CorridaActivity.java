@@ -44,8 +44,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DecimalFormat;
+
 import br.com.uberclone.R;
 import br.com.uberclone.config.ConfiguracaoFirebase;
+import br.com.uberclone.helper.Local;
 import br.com.uberclone.helper.UsuarioFirebase;
 import br.com.uberclone.model.Destino;
 import br.com.uberclone.model.Requisicao;
@@ -152,6 +155,7 @@ public class CorridaActivity extends AppCompatActivity
     private void requisicaoFinalisada() {
         //Alterar Interface
         fabRota.setVisibility(View.GONE);
+        requisicaoAtiva = false;
 
         if( marcadorMotorista != null )
             marcadorMotorista.remove();
@@ -167,7 +171,13 @@ public class CorridaActivity extends AppCompatActivity
 
         centralizarMarcador(localDestino);
 
-        buttonAceitarCorrida.setText(R.string.finishRace);
+        //Calcular Distancia
+        float distancia = Local.calcularDistancia(localPassageiro,localDestino);
+        float valor = (float) (distancia * 4);
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+        String resultado  = decimalFormat.format(valor);
+
+        buttonAceitarCorrida.setText(getString(R.string.finishRace) + "R$ "+ resultado);
     }
 
     private void requisicaoViagem() {
