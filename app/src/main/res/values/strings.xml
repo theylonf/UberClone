@@ -57,4 +57,5 @@
     <string name="totalRace">Total da viagem</string>
     <string name="totalPriceRace">\"Sua viagem ficou por: R$ \"</string>
     <string name="finishRace02">Encerrar corrida</string>
+    <string name="race_canceled">Corrida cancelada pelo passageiro</string>
 </resources>

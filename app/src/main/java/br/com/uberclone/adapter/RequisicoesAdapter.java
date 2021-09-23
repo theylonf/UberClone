@@ -47,24 +47,23 @@ public class RequisicoesAdapter extends RecyclerView.Adapter<RequisicoesAdapter.
 
         holder.nome.setText(passageiro.getNome());
         if(motorista != null){
+            if (motorista.getLatitude() != null && motorista.getLongitude() != null){
+                LatLng localPassageiro = new LatLng(
+                        Double.parseDouble(passageiro.getLatitude()),
+                        Double.parseDouble(passageiro.getLongitude())
+                );
 
-            LatLng localPassageiro = new LatLng(
-                    Double.parseDouble(passageiro.getLatitude()),
-                    Double.parseDouble(passageiro.getLongitude())
-            );
+                LatLng localMotorista = new LatLng(
+                        Double.parseDouble(motorista.getLatitude()),
+                        Double.parseDouble(motorista.getLongitude())
+                );
 
-            LatLng localMotorista = new LatLng(
-                    Double.parseDouble(motorista.getLatitude()),
-                    Double.parseDouble(motorista.getLongitude())
-            );
+                float distancia = Local.calcularDistancia(localPassageiro,localMotorista);
+                String distanciaFormatada = Local.formatarDistancia(distancia);
 
-            float distancia = Local.calcularDistancia(localPassageiro,localMotorista);
-            String distanciaFormatada = Local.formatarDistancia(distancia);
-
-            holder.distancia.setText(distanciaFormatada + "- aproximadamente");
+                holder.distancia.setText(distanciaFormatada + "- aproximadamente");
+            }
         }
-
-
     }
 
     @Override

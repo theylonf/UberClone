@@ -148,8 +148,17 @@ public class CorridaActivity extends AppCompatActivity
             case Requisicao.STATUS_FINALIZDA:
                 requisicaoFinalizada();
                 break;
+            case Requisicao.STATUS_CANCELADA:
+                requisicaoCancelada();
+                break;
         }
 
+    }
+
+    private void requisicaoCancelada() {
+        Toast.makeText(this, R.string.race_canceled, Toast.LENGTH_LONG).show();
+
+        startActivity(new Intent(CorridaActivity.this,RequisicoesActivity.class));
     }
 
     private void requisicaoFinalizada() {
