@@ -16,6 +16,7 @@ public class Requisicao {
     public static final String STATUS_A_CAMINHO = "a_caminho";
     public static final String STATUS_VIAGEM = "viagem";
     public static final String STATUS_FINALIZDA = "finalizada";
+    public static final String STATUS_ENCERRADA = "encerrada";
 
     public Requisicao() {
     }

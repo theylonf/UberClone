@@ -54,4 +54,7 @@
     <string name="finishRace">Corrida finalizada</string>
     <string name="driver_is_comming">Motorista está a caminho</string>
     <string name="to_destination">A caminho do destino</string>
+    <string name="totalRace">Total da viagem</string>
+    <string name="totalPriceRace">\"Sua viagem ficou por: R$ \"</string>
+    <string name="finishRace02">Encerrar corrida</string>
 </resources>
